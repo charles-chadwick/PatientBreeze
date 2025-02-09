@@ -13,7 +13,19 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
+            $table->string('on');
+            $table->bigInteger('on_id');
+            $table->string('status');
+            $table->json('type');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->string('file_name');
+            $table->string('original_file_name');
             $table->timestamps();
+            $table->softDeletes();
+            $table->bigInteger('created_by');
+            $table->bigInteger('updated_by')->nullable();
+            $table->bigInteger('deleted_by')->nullable();
         });
     }
 
