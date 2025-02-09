@@ -31,16 +31,15 @@ class DocumentSeeder extends Seeder {
             $original_file_name = strtolower(str_replace(' ', '_', $original_file_name)) . ".jpg";
             $file_path = "database/src/pics/$original_file_name";
 
-            if (!file_Exists($file_path)) {
+            if (!file_exists($file_path)) {
                 echo "$file_path does not exist!\n";
                 continue;
             }
 
             $extension = pathinfo($file_path, PATHINFO_EXTENSION);
-            $tmp_file_name = uniqid("profile_") . ".$extension";
+            $tmp_file_name = $original_file_name;
 
-            Storage::disk('local')
-                ->put("pics/$tmp_file_name", $file_path);
+            Storage::disk('public')->put("pics/".$tmp_file_name, file_get_contents($file_path));
 
             $user->profilePhoto()
                 ->create([
