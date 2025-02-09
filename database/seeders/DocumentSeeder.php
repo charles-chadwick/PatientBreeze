@@ -17,6 +17,7 @@ class DocumentSeeder extends Seeder {
      */
     public function run(): void {
 
+        Storage::disk('public')->deleteDirectory('profile');
         DB::table('documents')
             ->delete();
 
@@ -37,9 +38,9 @@ class DocumentSeeder extends Seeder {
             }
 
             $extension = pathinfo($file_path, PATHINFO_EXTENSION);
-            $tmp_file_name = $original_file_name;
+            $tmp_file_name = uniqid('profile_', true) . ".$extension";
 
-            Storage::disk('public')->put("pics/".$tmp_file_name, file_get_contents($file_path));
+            Storage::disk('public')->put("profile/".$tmp_file_name, file_get_contents($file_path));
 
             $user->profilePhoto()
                 ->create([
