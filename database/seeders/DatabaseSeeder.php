@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         (new UserSeeder())->run();
         (new PatientSeeder())->run();
+        (new DocumentSeeder())->run();
     }
 }

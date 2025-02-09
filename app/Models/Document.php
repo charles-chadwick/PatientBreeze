@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Document extends Base
 {
@@ -20,5 +21,9 @@ class Document extends Base
 
     public function __construct(array $attributes = []) {
         parent::__construct($attributes);
+    }
+
+    public function documentable(): MorphTo {
+        return $this->morphTo(type: "on", id: "on_id");
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('on');
             $table->bigInteger('on_id');
             $table->string('status');
-            $table->json('type');
+            $table->string('type');
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('file_name');

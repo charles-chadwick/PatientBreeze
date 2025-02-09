@@ -61,4 +61,7 @@ class User extends Base implements
         'remember_token',
     ];
 
+    public function profilePhoto() {
+        return $this->morphOne(Document::class, 'documentable', 'on', 'on_id');
+    }
 }
