@@ -44,6 +44,7 @@ class User extends Base implements
      */
     protected $fillable = [
         'role',
+        'status',
         'first_name',
         'last_name',
         'email',
