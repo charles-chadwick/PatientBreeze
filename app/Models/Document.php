@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\DocumentStatus;
+use App\Enums\DocumentType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+
 
 class Document extends Base
 {
@@ -25,5 +29,9 @@ class Document extends Base
 
     public function documentable(): MorphTo {
         return $this->morphTo(type: "on", id: "on_id");
+    }
+
+    public function scopeAccepted(Builder $query): Builder {
+        $query->where('status', DocumentStatus::Accepted);
     }
 }

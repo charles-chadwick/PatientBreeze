@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\DocumentType;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -61,7 +62,8 @@ class User extends Base implements
         'remember_token',
     ];
 
-    public function profilePhoto() {
-        return $this->morphOne(Document::class, 'documentable', 'on', 'on_id');
+    public function avatar(): MorphOne {
+        return $this->morphOne(Document::class, 'documentable', 'on', 'on_id')
+            ->where('type', DocumentType::Avatar);
     }
 }

@@ -17,7 +17,7 @@ class DocumentSeeder extends Seeder {
      */
     public function run(): void {
 
-        Storage::disk('public')->deleteDirectory('profile');
+        Storage::disk('public')->deleteDirectory('avatars');
         DB::table('documents')
             ->delete();
 
@@ -38,17 +38,18 @@ class DocumentSeeder extends Seeder {
             }
 
             $extension = pathinfo($file_path, PATHINFO_EXTENSION);
-            $tmp_file_name = uniqid('profile_', true) . ".$extension";
+            $tmp_file_name = uniqid('a_') . ".$extension";
 
-            Storage::disk('public')->put("profile/".$tmp_file_name, file_get_contents($file_path));
+            Storage::disk('public')->put("avatars/".$tmp_file_name, file_get_contents($file_path));
 
-            $user->profilePhoto()
+            $user->avatar()
                 ->create([
                     'status'             => DocumentStatus::Accepted,
                     'file_name'          => $tmp_file_name,
                     'original_file_name' => $original_file_name,
-                    'title'              => "$user->first_name's Profile Pic",
-                    'type'               => DocumentType::ProfilePhoto,
+                    'title'              => "$user->first_name's Avatar",
+                    'type'               => DocumentType::Avatar,
+                    'created_at'         => fake()->dateTimeBetween($user->created_at, "+ ".rand(1, 5)." minute")
                 ]);
         }
     }

@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreDocumentRequest;
-use App\Http\Requests\UpdateDocumentRequest;
+use App\Enums\DocumentStatus;
+use App\Enums\DocumentType;
+use App\Http\Requests\Documents\StoreDocumentRequest;
+use App\Http\Requests\Documents\UpdateDocumentRequest;
 use App\Models\Document;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
@@ -13,7 +19,7 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        //
+        return Document::with('documentable')->get();
     }
 
     /**
@@ -29,7 +35,24 @@ class DocumentController extends Controller
      */
     public function store(StoreDocumentRequest $request)
     {
-        //
+        $file = $request->file('upload');
+
+        $tmp_file_name = uniqid('a_') . '.' . $file->getClientOriginalExtension();
+        Storage::putFile(public_path("storage/avatars/$tmp_file_name"), $file);
+        $user = User::find($request->get('user_id'));
+        $document = Document::create([
+                'on'                => auth()->id(),
+                'status'             => DocumentStatus::Accepted,
+                'file_name'          => $tmp_file_name,
+                'original_file_name' => $file->getClientOriginalName(),
+                'title'              => "$user->first_name's Avatar",
+                'type'               => DocumentType::Avatar,
+            ]);
+
+        $user->avatar()->attach($document->id);
+
+        return $user;
+
     }
 
     /**
