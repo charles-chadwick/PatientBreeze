@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 
 class Document extends Base
@@ -17,6 +19,8 @@ class Document extends Base
         'on_id',
         'status',
         'type',
+        'mime_type',
+        'size',
         'title',
         'description',
         'file_name',
@@ -33,5 +37,11 @@ class Document extends Base
 
     public function scopeAccepted(Builder $query): Builder {
         $query->where('status', DocumentStatus::Accepted);
+    }
+
+    public static function uploadDocument(UploadedFile $file): string {
+        $tmp_file_name = uniqid('a_') . '.' . $file->getClientOriginalExtension();
+        Storage::putFile(public_path("storage/avatars/$tmp_file_name"), $file);
+        return $tmp_file_name;
     }
 }

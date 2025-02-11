@@ -8,6 +8,7 @@ use App\Models\Document;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,6 +46,8 @@ class DocumentSeeder extends Seeder {
             $user->avatar()
                 ->create([
                     'status'             => DocumentStatus::Accepted,
+                    'mime'               => $extension,
+                    'size'               => filesize($file_path),
                     'file_name'          => $tmp_file_name,
                     'original_file_name' => $original_file_name,
                     'title'              => "$user->first_name's Avatar",

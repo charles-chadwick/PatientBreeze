@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 
 namespace App\Http\Controllers;
 
@@ -19,7 +19,7 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        return Document::with('documentable')->get();
+
     }
 
     /**
@@ -36,23 +36,18 @@ class DocumentController extends Controller
     public function store(StoreDocumentRequest $request)
     {
         $file = $request->file('upload');
-
-        $tmp_file_name = uniqid('a_') . '.' . $file->getClientOriginalExtension();
-        Storage::putFile(public_path("storage/avatars/$tmp_file_name"), $file);
         $user = User::find($request->get('user_id'));
-        $document = Document::create([
-                'on'                => auth()->id(),
-                'status'             => DocumentStatus::Accepted,
-                'file_name'          => $tmp_file_name,
+
+        return $user->avatar()
+            ->create([
+                'size'               => $file->getSize(),
+                'mime_type'          => $file->getMimeType(),
+                'status'             => $request->get('status'),
+                'file_name'          => Document::uploadDocument($file),
                 'original_file_name' => $file->getClientOriginalName(),
-                'title'              => "$user->first_name's Avatar",
-                'type'               => DocumentType::Avatar,
+                'title'              => $request->get('title', "Document"),
+                'type'               => $request->get('type'),
             ]);
-
-        $user->avatar()->attach($document->id);
-
-        return $user;
-
     }
 
     /**
@@ -60,23 +55,7 @@ class DocumentController extends Controller
      */
     public function show(Document $document)
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Document $document)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateDocumentRequest $request, Document $document)
-    {
-        //
     }
 
     /**
@@ -84,6 +63,6 @@ class DocumentController extends Controller
      */
     public function destroy(Document $document)
     {
-        //
+        return $document->delete();
     }
 }

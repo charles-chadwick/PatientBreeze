@@ -17,6 +17,8 @@ return new class extends Migration
             $table->bigInteger('on_id');
             $table->string('status');
             $table->string('type');
+            $table->string('mime_type');
+            $table->integer('size');
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('file_name');
