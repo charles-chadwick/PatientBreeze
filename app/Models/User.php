@@ -12,6 +12,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,6 +27,10 @@ class User extends Base implements
     public function __construct(array $attributes = []) {
         parent::__construct($attributes);
     }
+
+    protected $appends = [
+        'full_name'
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -61,4 +66,15 @@ class User extends Base implements
         'remember_token',
     ];
 
+    public function discussions(): HasMany {
+        return $this->hasMany(Discussion::class, "created_by");
+    }
+
+    public function fullName() : Attribute {
+        return Attribute::make(
+            get: function($value, $attribute) {
+                return $attribute['first_name']." ".$attribute['last_name'];
+            }
+        );
+    }
 }

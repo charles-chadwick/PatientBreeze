@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('discussion_id');
             $table->unsignedBigInteger('user_id')->unsigned();
-            $table->boolean('user_has_read')->default(false);
             $table->timestamps();
             $table->softDeletes();
             $table->bigInteger('created_by');

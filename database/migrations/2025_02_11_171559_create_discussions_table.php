@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('discussions', function (Blueprint $table) {
             $table->id();
-            $table->string('on');
-            $table->bigInteger('on_id');
             $table->string('type');
             $table->string('status');
             $table->string('title');

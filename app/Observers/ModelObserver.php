@@ -12,7 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ModelObserver {
     public function creating(Model $model): Model {
-        $model->setAttribute('created_by', 1);
+        if (!isset($model->created_by)) {
+            $model->setAttribute('created_by', 1);
+        }
+
         return $model;
     }
 
