@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Discussion;
+use App\Models\DiscussionPost;
 use App\Models\User;
 use App\Observers\ModelObserver;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +24,9 @@ class AppServiceProvider extends ServiceProvider {
             ModelObserver::class
         ]);
         Discussion::observe([
+            ModelObserver::class
+        ]);
+        DiscussionPost::observe([
             ModelObserver::class
         ]);
     }

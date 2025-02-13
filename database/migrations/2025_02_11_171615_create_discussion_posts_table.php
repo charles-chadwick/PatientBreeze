@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('discussions_posts', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('discussion_id')->unsigned();
-            $table->integer('order');
+            $table->integer('order')->default(1);
             $table->string('status');
             $table->text('content');
             $table->timestamps();

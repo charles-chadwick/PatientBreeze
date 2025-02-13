@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DiscussionPostStatus;
 use App\Enums\DiscussionType;
-use App\Http\Requests\StoreDiscussionRequest;
-use App\Http\Requests\UpdateDiscussionRequest;
+use App\Http\Requests\Discussions\StoreDiscussionRequest;
+use App\Http\Requests\Discussions\UpdateDiscussionRequest;
 use App\Models\Discussion;
-use Illuminate\Support\Facades\Request;
+use App\Models\User;
 
 class DiscussionController extends Controller {
     /**
@@ -29,34 +30,29 @@ class DiscussionController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(StoreDiscussionRequest $request) {
-        //
+
+        $discussion = Discussion::create($request->only('type', 'status', 'title'));
+        $discussion->addUsers(request()->get('users'));
+        $discussion->posts()->create([
+            'status' => DiscussionPostStatus::Unread,
+            'content' => $request->get('content')
+        ]);
+
+        return $discussion;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Discussion $discussion) {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Discussion $discussion) {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateDiscussionRequest $request, Discussion $discussion) {
-        //
+    public function show(Discussion $discussion): Discussion {
+        return Discussion::with('users', 'posts')->find($discussion->id);
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Discussion $discussion) {
-        //
+        $discussion->removeUsers();
+        return $discussion->delete();
     }
 }

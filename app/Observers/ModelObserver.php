@@ -40,12 +40,10 @@ class ModelObserver {
             ->log('updated');
     }
 
-    public function deleting(Model $model): Model {
-        $model->setAttribute('deleted_by', 1);
-        return $model;
-    }
-
     public function deleted(Model $model): void {
+
+        $model->setAttribute('deleted_by', 1);
+        $model->save();
 
         activity('db-operations')
             ->performedOn($model)

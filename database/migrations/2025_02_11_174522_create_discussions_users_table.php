@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('discussion_id');
             $table->unsignedBigInteger('user_id')->unsigned();
-            $table->timestamps();
-            $table->softDeletes();
+            $table->index(['discussion_id', 'user_id']);
+            $table->dateTime('last_seen_at')->nullable();
+            $table->dateTime('created_at');
+            $table->dateTime('deleted_at')->nullable();
             $table->bigInteger('created_by');
-            $table->bigInteger('updated_by')->nullable();
             $table->bigInteger('deleted_by')->nullable();
         });
     }
