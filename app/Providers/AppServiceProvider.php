@@ -22,12 +22,15 @@ class AppServiceProvider extends ServiceProvider {
      * Bootstrap any application services.
      */
     public function boot(): void {
+
         User::observe([
             ModelObserver::class
         ]);
+
         Discussion::observe([
             ModelObserver::class
         ]);
+
         DiscussionPost::observe([
             ModelObserver::class
         ]);
