@@ -46,7 +46,7 @@ class DocumentSeeder extends Seeder {
             $user->avatar()
                 ->create([
                     'status'             => DocumentStatus::Accepted,
-                    'mime'               => $extension,
+                    'mime_type'          => "image/$extension",
                     'size'               => filesize($file_path),
                     'file_name'          => $tmp_file_name,
                     'original_file_name' => $original_file_name,
