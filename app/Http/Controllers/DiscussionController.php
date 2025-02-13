@@ -8,15 +8,20 @@ use App\Http\Requests\Discussions\StoreDiscussionRequest;
 use App\Http\Requests\Discussions\UpdateDiscussionRequest;
 use App\Models\Discussion;
 use App\Models\User;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Inertia\Inertia;
 
 class DiscussionController extends Controller {
     /**
      * Display a listing of the resource.
      */
     public function index($type = DiscussionType::PrivateMessage) {
-        return Discussion::with('users', 'posts')
-            ->withType($type)
-            ->get();
+        return Inertia::render('Discussions/Index', [
+            'discussions' => Discussion::with('users', 'posts', 'created_by')
+                ->withType($type)
+                ->get()
+        ]);
+
     }
 
     /**
