@@ -2,45 +2,24 @@
 
 namespace App\Providers;
 
-use App\Models\Discussion;
-use App\Models\DiscussionPost;
-use App\Models\Document;
-use App\Models\Patient;
-use App\Models\User;
-use App\Observers\ModelObserver;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider {
+class AppServiceProvider extends ServiceProvider
+{
     /**
      * Register any application services.
      */
-    public function register(): void {
+    public function register(): void
+    {
         //
     }
 
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void {
-
-        User::observe([
-            ModelObserver::class
-        ]);
-
-        Discussion::observe([
-            ModelObserver::class
-        ]);
-
-        DiscussionPost::observe([
-            ModelObserver::class
-        ]);
-
-        Patient::observe([
-            ModelObserver::class
-        ]);
-
-        Document::observe([
-            ModelObserver::class
-        ]);
+    public function boot(): void
+    {
+        Vite::prefetch(concurrency: 3);
     }
 }
